@@ -1,0 +1,6 @@
+{
+  "appId": "com.ovrmrw.example",
+  "appName": "Example",
+  "bundledWebRuntime": false,
+  "webDir": "build"
+}

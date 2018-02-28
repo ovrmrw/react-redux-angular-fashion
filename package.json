@@ -20,6 +20,8 @@
     "eject": "react-scripts-ts eject"
   },
   "devDependencies": {
+    "@capacitor/cli": "^1.0.0-alpha.5",
+    "@capacitor/core": "^1.0.0-alpha.5",
     "@types/jest": "^22.1.3",
     "@types/node": "^9.4.6",
     "@types/react": "^16.0.38",
