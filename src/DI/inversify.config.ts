@@ -20,8 +20,9 @@ export function prepareContainerForTesting(): Container {
   const testContainer = container.createChild();
   if (process.env.NODE_ENV === 'test') {
     testContainer.unbindAll();
-    testContainer.bind(Store).toConstantValue(new Store(reducers));
-    testContainer.bind(IncrementService).toSelf();
+    testContainer
+      .bind(Store)
+      .toConstantValue(new Store(reducers, undefined, { logging: true }));
   }
   return testContainer;
 }

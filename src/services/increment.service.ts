@@ -1,4 +1,5 @@
 import { injectable, inject } from 'inversify';
+import { Action } from 'redux';
 import { lazyInject } from '../DI';
 import { Store } from '../store';
 import { AppState } from '../reducer';
@@ -8,28 +9,28 @@ export class IncrementService {
   constructor(@inject(Store) private store: Store<AppState>) {}
 
   increment(): void {
-    this.store.dispatch({ type: 'INCREMENT' });
+    this.store.queue$.dispatch({ type: 'INCREMENT' });
   }
 
   decrement(): void {
-    this.store.dispatch({ type: 'DECREMENT' });
+    this.store.queue$.dispatch({ type: 'DECREMENT' });
   }
 
-  asyncIncrement(): Promise<void> {
-    return new Promise(resolve => {
+  asyncIncrement(): void {
+    const promise = new Promise<Action>(resolve => {
       setTimeout(() => {
-        this.store.dispatch({ type: 'ASYNC_INCREMENT' });
-        resolve();
+        resolve({ type: 'ASYNC_INCREMENT' });
       }, 1000);
     });
+    this.store.concurrent$.dispatch(promise);
   }
 
-  asyncDecrement(): Promise<void> {
-    return new Promise(resolve => {
+  asyncDecrement(): void {
+    const promise = new Promise<Action>(resolve => {
       setTimeout(() => {
-        this.store.dispatch({ type: 'ASYNC_DECREMENT' });
-        resolve();
+        resolve({ type: 'ASYNC_DECREMENT' });
       }, 1000);
     });
+    this.store.concurrent$.dispatch(promise);
   }
 }

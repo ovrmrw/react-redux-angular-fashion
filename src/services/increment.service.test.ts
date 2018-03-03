@@ -31,15 +31,25 @@ describe('IncrementService', () => {
     it('ASYNC_INCREMENT action is dispatched when asyncIncrement function is called.', async () => {
       expect.assertions(2);
       expect(store.getActionLog()).toEqual([]);
-      await incrementService.asyncIncrement();
-      expect(store.getActionLog()).toEqual([{ type: 'ASYNC_INCREMENT' }]);
+      incrementService.asyncIncrement();
+      await store.completeForTesting().then(() => {
+        expect(store.getActionLog()).toEqual([{ type: 'ASYNC_INCREMENT' }]);
+      });
     });
 
     it('ASYNC_DECREMENT action is dispatched when asyncDecrement function is called.', async () => {
       expect.assertions(2);
       expect(store.getActionLog()).toEqual([]);
-      await incrementService.asyncDecrement();
-      expect(store.getActionLog()).toEqual([{ type: 'ASYNC_DECREMENT' }]);
+      incrementService.asyncDecrement();
+      incrementService.decrement();
+      incrementService.asyncIncrement();
+      await store.completeForTesting().then(() => {
+        expect(store.getActionLog()).toEqual([
+          { type: 'DECREMENT' },
+          { type: 'ASYNC_DECREMENT' },
+          { type: 'ASYNC_INCREMENT' }
+        ]);
+      });
     });
   });
 });

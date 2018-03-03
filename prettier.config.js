@@ -1,6 +1,6 @@
 module.exports = {
   printWidth: 100,
-  // parser: 'typescript',
+  parser: 'typescript',
   singleQuote: true,
   semi: true,
   trailingComma: 'none',
